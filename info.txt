@@ -1,0 +1,56 @@
+ASP.NET Core Web App mit C# und Visual Studio Code:
+
+Andere Anwendungen auf dem Server starten und stoppen kann.
+Benutzerberechtigungen verwaltet.
+Eine Datenbank verwendet.
+Einen Web-Administratorbereich bietet, um den Zustand der Anwendungen zu überwachen.
+Zunächst mit Platzhalter-Apps arbeitet, die später durch echte ersetzt werden.
+Ich helfe dir gerne Schritt für Schritt dabei. Hier ist ein Vorschlag für den Aufbau und die nächsten Schritte:
+
+🔧 Projektstruktur (Vorschlag)
+Frontend: Razor Pages oder Blazor (je nach Präferenz)
+Backend: ASP.NET Core Web API
+Datenbank: SQLite oder SQL Server (für den Anfang SQLite, da leichtgewichtig)
+Authentifizierung: Identity (ASP.NET Core Identity)
+App-Verwaltung: Dienste zum Starten/Stoppen von Prozessen
+Admin-Bereich: Dashboard mit Statusübersicht
+
+ Projektstruktur erstellen:
+dotnet new webapp -n AppManager
+cd AppManager
+code .
+
+Benutzerverwaltung erstellen:
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+
+Dann Identity konfigurieren (z. B. mit AddDefaultIdentity).
+
+3. Datenbankmodell
+Tabelle Applications: Name, Pfad, Status
+Tabelle UserPermissions: UserId, AppId, Rechte (Start/Stop)
+4. Platzhalter-Apps
+Erstelle Dummy-Einträge in der Datenbank, z. B.:
+[
+  { "Name": "App1", "Path": "C:\\FakeApps\\App1.exe", "Status": "Stopped" },
+  { "Name": "App2", "Path": "C:\\FakeApps\\App2.exe", "Status": "Running" }
+]
+
+Process.Start("PfadZurApp.exe");
+
+6. Admin-Dashboard
+Übersicht aller Apps
+Buttons zum Starten/Stoppen
+Statusanzeige (z. B. grün/rot)
+
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+
+dotnet tool install --global dotnet-ef
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+dotnet add package Microsoft.AspNetCore.Identity.UI
+
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
