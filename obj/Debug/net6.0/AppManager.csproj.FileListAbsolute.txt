@@ -7,6 +7,7 @@ C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Ap
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\AppManager.runtimeconfig.json
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\AppManager.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\AppManager.pdb
+C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Humanizer.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
@@ -14,6 +15,7 @@ C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Mi
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.Data.Sqlite.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Sqlite.dll
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
@@ -48,6 +50,7 @@ C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\Ap
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\AppManager.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\AppManager.RazorAssemblyInfo.cache
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\AppManager.RazorAssemblyInfo.cs
+C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\AppManager.sourcelink.json
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\rjimswa.dswa.cache.json
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\rjsmrazor.dswa.cache.json
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net6.0\rjsmcshtml.dswa.cache.json

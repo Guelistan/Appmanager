@@ -46,3 +46,28 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+.card-app {
+  background-color: #f0f8ff;
+  border: 2px solid #c99bff;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-start {
+  background-color: #28a745;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-stop {
+  background-color: #dc3545;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-restart {
+  background-color: #ffc107;
+  color: black;
+}

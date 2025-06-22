@@ -46,3 +46,28 @@ button.accept-policy[b-4smsn6lie9] {
   white-space: nowrap;
   line-height: 60px;
 }
+.card-app[b-4smsn6lie9] {
+  background-color: #f0f8ff;
+  border: 2px solid #c99bff;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-start[b-4smsn6lie9] {
+  background-color: #28a745;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-stop[b-4smsn6lie9] {
+  background-color: #dc3545;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-restart[b-4smsn6lie9] {
+  background-color: #ffc107;
+  color: black;
+}
