@@ -43,5 +43,6 @@ namespace AppManager.Pages.Account
             public string Abteilung { get; set; }
             public string Passwort { get; set; }
         }
+        
     }
 }
