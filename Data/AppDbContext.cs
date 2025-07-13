@@ -6,8 +6,7 @@ namespace AppManager.Data
 {
     public class AppDbContext : IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
         public DbSet<Application> Applications { get; set; }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }

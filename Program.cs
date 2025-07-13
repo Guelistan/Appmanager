@@ -4,26 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI;
 using System.Linq;
-using AppManager.Models;
-using Microsoft.AspNetCore.Identity;
-
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Datenbank konfigurieren
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Keine Identity hinzufügen, da eigene Login-Logik verwendet wird
+
 builder.Services.AddAuthentication("MyCookieAuth")
     .AddCookie("MyCookieAuth", options =>
     {
@@ -41,13 +29,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
-
+// 🔧 Datenbank seeding
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    // Nur Dummy-Daten hinzufügen, wenn noch keine vorhanden sind
     if (!context.Applications.Any())
     {
         context.Applications.AddRange(
@@ -64,14 +50,12 @@ using (var scope = app.Services.CreateScope())
                 RestartRequired = true
             }
         );
-        context.SaveChanges();
+
+        context.SaveChanges(); // ❗ wichtig, damit Daten gespeichert werden
     }
 }
 
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
+// 🌐 Jetzt wird die App IMMER gestartet – egal ob Daten existieren oder nicht
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

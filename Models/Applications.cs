@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using AppManager.Pages.Admin;
+using AppManager.Models;
 
 namespace AppManager.Models
 {
-    // Repräsentiert eine Anwendung
     public class Application
     {
         public int Id { get; set; }
@@ -19,9 +20,6 @@ namespace AppManager.Models
         public string Version { get; set; }
         public string Category { get; set; }
         public string Tags { get; set; } // Kommagetrennte Tags
-        public List<User> Admins { get; set; } = new List<User>();
-        public List<User> AllowedUsers { get; set; } = new List<User>();
         public string Path { get; set; } // Hinzugefügtes Feld
     }
-    
-    }
+}
