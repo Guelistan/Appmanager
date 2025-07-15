@@ -1,0 +1,26 @@
+@page "/Account/Register"
+@model AppManager.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Registrieren";
+}
+
+<h2>Registrieren</h2>
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input asp-for="Input.Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Vorname</label>
+        <input asp-for="Input.Vorname" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Abteilung</label>
+        <input asp-for="Input.Abteilung" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Passwort</label>
+        <input asp-for="Input.Passwort" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Registrieren</button>
+</form>

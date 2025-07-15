@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,10 @@ namespace AppManager.Data
     public class AppUser : IdentityUser
     {
         public bool IsActive { get; set; }
-        public System.DateTime CreatedAt { get; set; }
+        public string Vorname { get; set; }
+        public string Abteilung { get; set; }
+        public System.DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        // weitere Felder nach Bedarf
     }
 
     public class ApplicationDbContext : IdentityDbContext<AppUser>

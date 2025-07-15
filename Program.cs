@@ -14,7 +14,7 @@ builder.Services.AddDefaultIdentity<AppUser>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 // Datenbank konfigurieren
-builder.Services.AddDbContext<AppManager.Data.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication("MyCookieAuth")

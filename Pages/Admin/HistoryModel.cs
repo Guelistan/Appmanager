@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AppManager.Pages.Admin
 {
-    public class HistoryModel : PageModel
+    public class HistoryModel : Microsoft.AspNetCore.Mvc.RazorPages.PageModel
     {
         private readonly AppDbContext _context;
 
@@ -22,4 +22,5 @@ namespace AppManager.Pages.Admin
             History = _context.Set<AppLaunchHistory>().ToList();
         }
     }
+    
 }

@@ -13,16 +13,8 @@ namespace AppManager.Data
         }
 
         public DbSet<Application> Applications { get; set; }
-        public DbSet<AppLaunchHistory> AppLaunchHistories { get; set; }
-        // KEIN weiteres DbSet<User>!
     }
 }
 
-namespace AppManager.Models
-{
-    public class AppUser : IdentityUser
-    {
-        public bool IsActive { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-    }
-}
+
+
