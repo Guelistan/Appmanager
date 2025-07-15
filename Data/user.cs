@@ -1,13 +1,27 @@
+/* using System;
+using System.ComponentModel.DataAnnotations;
+using AppManager.Data;
 
-// Repräsentiert einen Benutzer
 namespace AppManager.Data
 {
-    
-public class User
+    public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
-        public bool IsAdmin { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
+
+        [Required, EmailAddress]
+        public string Email { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public static implicit operator User(AppUser v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+ */

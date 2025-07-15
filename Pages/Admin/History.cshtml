@@ -1,0 +1,31 @@
+@page
+@model AppManager.Pages.Admin.HistoryModel
+@{
+    ViewData["Title"] = "Startverlauf";
+}
+
+<h2>Startverlauf</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ApplicationId</th>
+            <th>UserId</th>
+            <th>Startzeitpunkt</th>
+            <th>Grund</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model.History)
+        {
+            <tr>
+                <td>@entry.Id</td>
+                <td>@entry.ApplicationId</td>
+                <td>@entry.UserId</td>
+                <td>@entry.LaunchTime.ToString("g")</td>
+                <td>@entry.Reason</td>
+            </tr>
+        }
+    </tbody>
+</table>

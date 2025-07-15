@@ -278,8 +278,8 @@ C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\co
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\n9v0m7k7y0-muycvpuwrr.gz
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\dj2194fvah-87fc7y1x7t.gz
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\vejdxrx0ss-mlv21k5csn.gz
-C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\e025yxumr0-sdmf7558d7.gz
-C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\eosxrykk0y-sdmf7558d7.gz
+C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\e025yxumr0-nxv4pzmpel.gz
+C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\compressed\eosxrykk0y-nxv4pzmpel.gz
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\user\OneDrive\Desktop\Dersler\appstarter\AppManager\obj\Debug\net9.0\staticwebassets.development.json

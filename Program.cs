@@ -6,10 +6,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddDefaultIdentity<AppUser>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 // Datenbank konfigurieren
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AppManager.Data.AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication("MyCookieAuth")
