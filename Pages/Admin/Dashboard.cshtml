@@ -1,5 +1,6 @@
 @page
 @model AppManager.Pages.Admin.DashboardModel
+@using AppManager.Pages.Admin
 @using AppManager.Models
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -75,6 +76,16 @@
                     <span>Nein</span>
                 }
             </td>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p>Willkommen, @User.Identity.Name</p>
+                }
+                else
+                {
+                    <p><em>Du bist nicht eingeloggt.</em></p>
+                }
+
             <td>
                 <form method="post" style="display:inline;">
                     <input type="hidden" name="AppId" value="@app.Id" />

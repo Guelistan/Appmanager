@@ -6,9 +6,10 @@ using AppManager.Models;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace AppManager.Pages.Admin
 {
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")] später hinzufügen, wenn Rollen implementiert sind
     public class DashboardModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -27,6 +28,19 @@ namespace AppManager.Pages.Admin
 
         public IActionResult OnPost(int AppId, string action)
         {
+            if (!User.Identity.IsAuthenticated || !User.IsInRole("Admin"))
+            {
+                return Unauthorized();
+            }
+            if (AppId <= 0 || string.IsNullOrEmpty(action))
+            {
+                return BadRequest("Ungültige Anforderung");
+            }
+            var validActions = new[] { "start", "stop", "restart" };
+            if (!validActions.Contains(action))
+            {
+                return BadRequest("Ungültige Aktion");
+            }
             var app = _context.Applications.FirstOrDefault(a => a.Id == AppId);
             if (app == null) return RedirectToPage();
 

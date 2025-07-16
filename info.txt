@@ -47,9 +47,26 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
 dotnet add package Microsoft.EntityFrameworkCore.Tools
 
+
+Eine EF Core Migration ist einfach eine C#-Klasse, die angibt, wie die Datenbankstruktur geändert werden soll.
+
+Sie enthält zwei Methoden:
+Up: Um die Datenbankstruktur zu aktualisieren:
+protected override void Up(MigrationBuilder migrationBuilder) { ... }
+Down: Um die Datenbankstruktur zu zurückrollen:
+protected override void Down(MigrationBuilder migrationBuilder) { ... } 
 dotnet tool install --global dotnet-ef
 dotnet ef migrations add InitialCreate
 dotnet ef database update
+
+dotnet ef database update NameDerVorherigenMigration, ewnn migration schon angewendet,
+dann erst zurückrollen.
+
+dann bearbeiten und dann wieder update.
+
+
+
+
 
 dotnet add package Microsoft.AspNetCore.Identity.UI
 

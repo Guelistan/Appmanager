@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/* using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using AppManager.Data;
@@ -46,4 +46,4 @@ namespace AppManager.Pages.Account
             public string Passwort { get; set; }
         }
     }
-}
+} */

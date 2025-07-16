@@ -1,67 +1,78 @@
-@page "/Users"
+@page
 @model AppManager.Pages.Admin.UsersModel
-@{
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-    <h2>Benutzer hinzufügen</h2>
-    <form method="post">
-        <div>
-            <label>Benutzername:</label>
-            <input asp-for="NewUser.UserName" class="form-control" />
-            <span asp-validation-for="NewUser.UserName" class="text-danger"></span>
-        </div>
-        <div>
-            <label>Email:</label>
-            <input asp-for="NewUser.Email" class="form-control" />
-            <span asp-validation-for="NewUser.Email" class="text-danger"></span>
-        </div>
-        <div>
-            <label>Aktiv:</label>
-            <input asp-for="NewUser.IsActive" type="checkbox" />
-        </div>
-        <button type="submit" class="btn btn-primary">Hinzufügen</button>
-    </form>
+<h2>Benutzer hinzufügen</h2>
 
-    <hr />
-    <h2>Benutzerliste</h2>
-    <table class="table">
-        <thead>
+<form method="post" asp-page-handler="Async">
+    <div class="mb-3">
+        <label asp-for="NewUser.Email" class="form-label">Email:</label>
+        <input asp-for="NewUser.Email" class="form-control" />
+        <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NewUser.Vorname" class="form-label">Vorname:</label>
+        <input asp-for="NewUser.Vorname" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="NewUser.Abteilung" class="form-label">Abteilung:</label>
+        <input asp-for="NewUser.Abteilung" class="form-control" />
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="NewUser.IsActive" class="form-check-input" />
+        <label asp-for="NewUser.IsActive" class="form-check-label">Aktiv</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Benutzer erstellen</button>
+</form>
+
+<hr />
+<h2>Benutzerliste</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Vorname</th>
+            <th>Abteilung</th>
+            <th>Aktiv</th>
+            <th>Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Aktiv</th>
-                <th>Aktion</th>
+                <td>@user.Id</td>
+                <td>@user.Email</td>
+                <td>@user.Vorname</td>
+                <td>@user.Abteilung</td>
+                <td>@(user.IsActive ? "Ja" : "Nein")</td>
+                <td>
+                    <!-- Bearbeiten -->
+                    <form method="post" asp-page-handler="EditAsync" class="d-inline-flex gap-1 align-items-center">
+                        <input type="hidden" name="EditUser.Id" value="@user.Id" />
+                        <input type="text" name="EditUser.Email" value="@user.Email" class="form-control form-control-sm"
+                            style="width:150px;" />
+                        <input type="text" name="EditUser.Vorname" value="@user.Vorname"
+                            class="form-control form-control-sm" style="width:120px;" />
+                        <input type="text" name="EditUser.Abteilung" value="@user.Abteilung"
+                            class="form-control form-control-sm" style="width:120px;" />
+                        <input type="checkbox" name="EditUser.IsActive" class="form-check-input" value="true"
+                            @(user.IsActive ? "checked" : "") />
+                        <button type="submit" class="btn btn-sm btn-success">Speichern</button>
+                    </form>
+
+                    <!-- Löschen -->
+                    <form method="post" asp-page-handler="DeleteAsync" asp-route-id="@user.Id" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Löschen</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td>@(user.IsActive ? "Ja" : "Nein")</td>
-                    <td>
-                        <!-- Bearbeiten-Formular -->
-                        <form method="post" asp-page-handler="Edit">
-                            <input type="hidden" name="EditUser.Id" value="@user.Id" />
-                            <input type="text" name="EditUser.UserName" value="@user.UserName" />
-                            <input type="email" name="EditUser.Email" value="@user.Email" />
-                            <input type="checkbox" name="EditUser.IsActive" @(user.IsActive ? "checked" : "") />
-                            <button type="submit">Speichern</button>
-                        </form>
+        }
+    </tbody>
+</table>
 
-                        <!-- Löschen-Formular -->
-                        <form method="post" asp-page-handler="Delete" asp-route-id="@user.Id" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm mt-1">Löschen</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
