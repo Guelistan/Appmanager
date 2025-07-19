@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "I57ejUiFilg=",
+  "dgSpecHash": "dsS3a7Us+X8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\AppManager\\AppManager.csproj",
+  "projectFilePath": "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\AppManager.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\9.0.6\\microsoft.aspnetcore.cryptography.internal.9.0.6.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\9.0.6\\microsoft.aspnetcore.cryptography.keyderivation.9.0.6.nupkg.sha512",

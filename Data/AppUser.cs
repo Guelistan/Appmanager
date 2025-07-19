@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using AppManager.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace AppManager.Data
@@ -32,10 +33,17 @@ namespace AppManager.Data
 
         //public new DbSet<AppUser> Users { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<ActivityLog> Logs { get; set; }
 
         public List<AppUser> GetUsersOrderedByCreationDate()
         {
             return Users.OrderByDescending(u => u.CreatedAt).ToList();
+        }
+
+        public class ActivityLog
+        {
+            public int Id { get; set; }
+            public string UserId { get; set; }
         }
     }
 }

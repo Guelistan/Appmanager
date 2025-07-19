@@ -11,6 +11,8 @@ namespace AppManager.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+
+
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender; // Du brauchst eine Implementierung

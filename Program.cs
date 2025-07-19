@@ -11,6 +11,7 @@ using AppManager.Data;
 using AppManager.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AppManager.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddSingleton<IEmailSender, ConsoleEmailSender>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+    
 // 🔐 Identity mit deinem benutzerdefinierten AppUser
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

@@ -1,26 +1,18 @@
-@page "/Account/Login"
-@model AppManager.Pages.Account.LoginModel
-@{
-    ViewData["Title"] = "Login";
-}
+@page
+@model LoginModel
 
-<h2>Login</h2>
+<h3>Login</h3>
+
 <form method="post">
-    <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input asp-for="Input.Name" class="form-control" />
+    <div>
+        <label>Benutzername</label>
+        <input asp-for="Input.Username" />
     </div>
-    <div class="mb-3">
-        <label class="form-label">Vorname</label>
-        <input asp-for="Input.Vorname" class="form-control" />
+    <div>
+        <label>Passwort</label>
+        <input asp-for="Input.Password" type="password" />
     </div>
-    <div class="mb-3">
-        <label class="form-label">Abteilung</label>
-        <input asp-for="Input.Abteilung" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Passwort</label>
-        <input asp-for="Input.Passwort" type="password" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit">Einloggen</button>
+
+    <div asp-validation-summary="All"></div>
 </form>
