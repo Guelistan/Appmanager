@@ -6,7 +6,17 @@
 string hash = BCrypt.Net.BCrypt.HashPassword(password);
 
 <h2>Registrieren</h2>
+@section Scripts {
+    <script src="your-validation-script.js"></script>
+}
+<div class="alert alert-info" role="alert">
+    Bitte füllen Sie das folgende Formular aus, um ein neues Konto zu erstellen.
+</div>
 <form method="post">
+    <div class="mb-3">
+        <label for="Input.Email" class="form-label">Email</label>
+        <input asp-for="Input.Email" class="form-control" />
+    </div>
     <div class="mb-3">
         <label class="form-label">Name</label>
         <input asp-for="Input.Name" class="form-control" />

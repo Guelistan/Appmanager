@@ -16,8 +16,25 @@
             <th>Grund</th>
         </tr>
     </thead>
-    <tbody> 
-        
-    }
-ody>
-
+    <tbody>
+        @if (Model.History != null && Model.History.Any())
+        {
+            foreach (var item in Model.History)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.ApplicationId</td>
+                    <td>@item.UserId</td>
+                    <td>@item.LaunchTime.ToString("g")</td>
+                    <td>@item.Reason</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Keine Einträge gefunden.</td>
+            </tr>
+        }
+    </tbody>
+</table>

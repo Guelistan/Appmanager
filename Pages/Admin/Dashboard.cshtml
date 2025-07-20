@@ -1,43 +1,51 @@
-@page
+ @page
 @model AppManager.Pages.Admin.DashboardModel
-@using AppManager.Pages.Admin
 @using AppManager.Models
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Authorization
 
 <h2>📋 App Dashboard</h2>
 
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <p class="text-success">Willkommen, @User.Identity.Name</p>
+}
+else
+{
+    <p class="text-muted"><em>Du bist nicht eingeloggt.</em></p>
+}
+
 <!-- Karten-Ansicht -->
 <div class="row">
-@foreach (var app in Model.Applications)
-{
-    <div class="col-md-4">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4 class="card-title">@app.Name</h4>
-                <p>Status:
-                    @if (app.IsStarted)
+    @foreach (var app in Model.Applications)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">@app.Name</h4>
+                    <p>Status:
+                        @if (app.IsStarted)
+                        {
+                            <span style="color:green;">🟢 Gestartet</span>
+                        }
+                        else
+                        {
+                            <span style="color:red;">🔴 Gestoppt</span>
+                        }
+                    </p>
+                    @if (app.RestartRequired)
                     {
-                        <span style="color:green;">🟢 Gestartet</span>
+                        <p style="color:orange;">⚠️ Neustart erforderlich</p>
                     }
-                    else
-                    {
-                        <span style="color:red;">🔴 Gestoppt</span>
-                    }
-                </p>
-                @if (app.RestartRequired)
-                {
-                    <p style="color:orange;">⚠️ Neustart erforderlich</p>
-                }
-                <form method="post">
-                    <input type="hidden" name="AppId" value="@app.Id" />
-                    <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
-                    <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
-                    <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
-                </form>
+                    <form method="post">
+                        <input type="hidden" name="AppId" value="@app.Id" />
+                        <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
+                        <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
+                        <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 </div>
 
 <!-- Tabellen-Ansicht -->
@@ -52,49 +60,39 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var app in Model.Applications)
-    {
-        <tr>
-            <td>@app.Name</td>
-            <td>
-                @if (app.IsStarted)
-                {
-                    <span style="color:green;">Gestartet</span>
-                }
-                else
-                {
-                    <span style="color:red;">Gestoppt</span>
-                }
-            </td>
-            <td>
-                @if (app.RestartRequired)
-                {
-                    <span style="color:orange;">Ja</span>
-                }
-                else
-                {
-                    <span>Nein</span>
-                }
-            </td>
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <p>Willkommen, @User.Identity.Name</p>
-                }
-                else
-                {
-                    <p><em>Du bist nicht eingeloggt.</em></p>
-                }
-
-            <td>
-                <form method="post" style="display:inline;">
-                    <input type="hidden" name="AppId" value="@app.Id" />
-                    <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
-                    <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
-                    <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
-                </form>
-            </td>
-        </tr>
-    }
+        @foreach (var app in Model.Applications)
+        {
+            <tr>
+                <td>@app.Name</td>
+                <td>
+                    @if (app.IsStarted)
+                    {
+                        <span style="color:green;">Gestartet</span>
+                    }
+                    else
+                    {
+                        <span style="color:red;">Gestoppt</span>
+                    }
+                </td>
+                <td>
+                    @if (app.RestartRequired)
+                    {
+                        <span style="color:orange;">Ja</span>
+                    }
+                    else
+                    {
+                        <span>Nein</span>
+                    }
+                </td>
+                <td>
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="AppId" value="@app.Id" />
+                        <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
+                        <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
+                        <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

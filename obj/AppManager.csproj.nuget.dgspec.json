@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\AppManager.csproj": {}
+    "C:\\Users\\user\\OneDrive\\Desktop\\AppManager\\AppManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\AppManager.csproj": {
+    "C:\\Users\\user\\OneDrive\\Desktop\\AppManager\\AppManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\AppManager.csproj",
+        "projectUniqueName": "C:\\Users\\user\\OneDrive\\Desktop\\AppManager\\AppManager.csproj",
         "projectName": "AppManager",
-        "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\AppManager.csproj",
+        "projectPath": "C:\\Users\\user\\OneDrive\\Desktop\\AppManager\\AppManager.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\Dersler\\appstarter\\Appmanager\\obj\\",
+        "outputPath": "C:\\Users\\user\\OneDrive\\Desktop\\AppManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

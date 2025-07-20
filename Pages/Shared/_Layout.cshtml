@@ -14,35 +14,40 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-page="/Index">AppManager</a>
-                <div class="d-flex gap-2">
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <!-- Für eingeloggte Benutzer -->
-                        <span class="navbar-text">Hallo, @User.Identity.Name!</span>
+        @section Scripts {
+            <script src="your-validation-script.js"></script>
+        }
+    </header>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
-                        }
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-page="/Index">AppManager</a>
+            <div class="d-flex gap-2">
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <!-- Für eingeloggte Benutzer -->
+                    <span class="navbar-text">Hallo, @User.Identity.Name!</span>
 
-                        <form method="post" asp-page="/Account/Logout" class="d-inline">
-                            <button type="submit" class="btn btn-outline-danger">Logout</button>
-                        </form>
-                    }
-                    else
+                    @if (User.IsInRole("Admin"))
                     {
-                        <!-- Für nicht eingeloggte Benutzer -->
-                        <a class="btn btn-outline-primary" asp-page="/Account/Login">Login</a>
-                        <a class="btn btn-outline-secondary" asp-page="/Account/Register">Register</a>
                         <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
-                        <a class="btn btn-outline-info" asp-page="/Admin/History">History</a>
                     }
-                </div>
+
+                    <form method="post" asp-page="/Account/Logout" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <!-- Für nicht eingeloggte Benutzer -->
+                    <a class="btn btn-outline-primary" asp-page="/Account/Login">Login</a>
+                    <a class="btn btn-outline-secondary" asp-page="/Account/Register">Register</a>
+                    <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
+                    <a class="btn btn-outline-info" asp-page="/Admin/History">History</a>
+                }
             </div>
-        </nav>
+        </div>
+    </nav>
     </header>
 
     <div class="container">
@@ -63,6 +68,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>

@@ -34,6 +34,10 @@ namespace AppManager.Data
         //public new DbSet<AppUser> Users { get; set; }
         public DbSet<Application> Applications { get; set; }
         public DbSet<ActivityLog> Logs { get; set; }
+        public DbSet<LogEntry> LogEntries { get; set; }
+        public new DbSet<AppUser> Users { get; set; }
+
+        public DbSet<AppLaunchHistory> AppLaunchHistories { get; set; }
 
         public List<AppUser> GetUsersOrderedByCreationDate()
         {
@@ -45,5 +49,6 @@ namespace AppManager.Data
             public int Id { get; set; }
             public string UserId { get; set; }
         }
+        
     }
 }

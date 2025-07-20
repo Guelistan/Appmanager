@@ -11,34 +11,36 @@ using AppManager.Data;
 using AppManager.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AppManager.Services;
-using Microsoft.Extensions.Options;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IEmailSender, ConsoleEmailSender>();
+// 📧 Fake E-Mail-Sender für Entwicklung
+builder.Services.AddTransient<IEmailSender, ConsoleEmailSender>();
 
-// 📦 Datenbankkonfiguration mit SQLite
+// 📦 Datenbank mit SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-    
-// 🔐 Identity mit deinem benutzerdefinierten AppUser
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+// 🔐 Identity-Konfiguration
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+    {
+        options.SignIn.RequireConfirmedEmail = true;
+    })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-// 🍪 Cookie-basiertes Authentifizierungssystem
-builder.Services.AddAuthentication("MyCookieAuth")
-    .AddCookie("MyCookieAuth", options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/Login";
-    });
+// 🍪 Authentifizierung via Cookie
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/Login";
+});
 
-// 📄 Razor Pages hinzufügen
+// 📄 Razor Pages aktivieren
 builder.Services.AddRazorPages();
 
-// 📋 HttpLogging aktivieren
+// 📋 HTTP-Logging aktivieren
 builder.Services.AddHttpLogging(logging =>
 {
     logging.LoggingFields = HttpLoggingFields.All;
@@ -46,36 +48,72 @@ builder.Services.AddHttpLogging(logging =>
 
 var app = builder.Build();
 
-// 🧪 Initiales Datenbank-Seeding (Benutzer, Rollen, Apps)
+// ⚠️ Fehlerbehandlung
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+// 📡 Middleware-Pipeline
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseHttpLogging();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapRazorPages();
+
+// 🧪 Initiales Datenbank-Seeding (Rollen, Admin, Anwendungen)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     var context = services.GetRequiredService<AppDbContext>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // Anwendungseinträge
+    context.Database.Migrate();
+
+    // Anwendungen seeden
     if (!context.Applications.Any())
+
+
     {
         context.Applications.AddRange(
+            new Application { Name = "App Manager", IsStarted = true, RestartRequired = false },
+            new Application { Name = "Test App", IsStarted = false, RestartRequired = true },
+            new Application { Name = "Demo App", IsStarted = true, RestartRequired = false },
+            new Application { Name = "Beispiel App", IsStarted = false, RestartRequired = true },
             new Application { Name = "App 1", IsStarted = false, RestartRequired = false },
-            new Application { Name = "App 2", IsStarted = true, RestartRequired = true }
+            new Application { Name = "App 2", IsStarted = true, RestartRequired = true },
+            new Application { Name = "/Desktop/Notepad", IsStarted = false, RestartRequired = false },
+            new Application { Name = "/Desktop/Calculator", IsStarted = true, RestartRequired = false },
+            new Application { Name = "/Desktop/Browser", IsStarted = false, RestartRequired = true },
+            new Application { Name = "/Desktop/WetterApp", IsStarted = false, RestartRequired = true }
         );
+
+
         context.SaveChanges();
     }
 
-    // Rollen erstellen
+
+
+    var allApps = context.Applications.ToList();
+    Console.WriteLine("Apps in DB:");
+    foreach (var a in allApps)
+    {
+        Console.WriteLine($"- {a.Name}");
+    }
+
+    // Rollen anlegen
     string[] roles = { "Admin", "SuperAdmin" };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
-        {
             await roleManager.CreateAsync(new IdentityRole(role));
-        }
     }
 
-    // Hauptadmin erstellen
+    // Hauptadmin anlegen
     var email = "hauptadmin@app.com";
     var password = "Hauptadmin123!";
 
@@ -98,28 +136,6 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(admin, "SuperAdmin");
     }
 }
-
-// ⚠️ Ausnahmebehandlung im Produktivmodus
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseHttpLogging();
-app.UseAuthentication();
-app.UseAuthorization();
-
-// 🔁 Konventionelles Routing für MVC-Controller
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// 📄 Razor Pages-Routen aktivieren
-app.MapRazorPages();
 
 // 🚀 Anwendung starten
 app.Run();

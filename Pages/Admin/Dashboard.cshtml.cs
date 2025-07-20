@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using AppManager.Data;
 using AppManager.Models;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace AppManager.Pages.Admin
 {
-    // [Authorize(Roles = "Admin")] später hinzufügen, wenn Rollen implementiert sind
     public class DashboardModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -21,45 +21,38 @@ namespace AppManager.Pages.Admin
 
         public List<Application> Applications { get; set; } = new();
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            Applications = _context.Applications.ToList();
+            Applications = await _context.Applications
+                .OrderByDescending(a => a.LastLaunchTime)
+                .ToListAsync();
         }
 
-        public IActionResult OnPost(int AppId, string action)
+        public async Task<IActionResult> OnPostAsync(int AppId, string action)
         {
-            if (!User.Identity.IsAuthenticated || !User.IsInRole("Admin"))
-            {
-                return Unauthorized();
-            }
-            if (AppId <= 0 || string.IsNullOrEmpty(action))
-            {
-                return BadRequest("Ungültige Anforderung");
-            }
-            var validActions = new[] { "start", "stop", "restart" };
-            if (!validActions.Contains(action))
-            {
-                return BadRequest("Ungültige Aktion");
-            }
-            var app = _context.Applications.FirstOrDefault(a => a.Id == AppId);
-            if (app == null) return RedirectToPage();
+            var app = await _context.Applications.FindAsync(AppId);
+            if (app == null) return NotFound();
 
             switch (action)
             {
                 case "start":
                     app.IsStarted = true;
-                    app.RestartRequired = false;
+                    app.LastLaunchReason = "Manuell gestartet";
+                    app.LastLaunchTime = DateTime.Now;
                     break;
                 case "stop":
                     app.IsStarted = false;
+                    app.LastLaunchReason = "Manuell gestoppt";
                     break;
                 case "restart":
                     app.IsStarted = true;
                     app.RestartRequired = false;
+                    app.LastLaunchReason = "Manuell neu gestartet";
+                    app.LastLaunchTime = DateTime.Now;
                     break;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToPage();
         }
     }

@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@*
+    _ValidationScriptsPartial.cshtml
+
+    Dieses Partial-View enthält die grundlegende HTML-Struktur für die AppManager-Webanwendung.
+    Es bindet die wichtigsten Stylesheets und JavaScript-Bibliotheken ein, darunter Bootstrap, jQuery und Validierungsskripte.
+    
+    - Der Header enthält eine Navigationsleiste mit Links zu verschiedenen Seiten (Admin Dashboard, Login, Registrierung, AppLaunchHistory).
+    - Der Hauptbereich (main) ist als Platzhalter für den Seiteninhalt vorgesehen.
+    - Das Footer-Element zeigt Copyright-Informationen und einen Link zur Datenschutzseite.
+    - Im Scripts-Bereich werden die Validierungsskripte für Formulare eingebunden, um clientseitige Validierung zu ermöglichen.
+    - Die Datei ist als Partial-View konzipiert und kann in anderen Razor-Seiten eingebunden werden, um die Validierungsfunktionen bereitzustellen.
+*@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -39,7 +51,7 @@
 
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+
         </main>
     </div>
 
@@ -48,12 +60,13 @@
             &copy; 2025 - AppManager - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/validation-scripts.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>
