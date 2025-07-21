@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250721101456_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250721190516_AddProgramManagementFields")]
+    partial class AddProgramManagementFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,10 @@ namespace AppManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ApplicationId")
                         .HasColumnType("TEXT");
 
@@ -121,9 +125,11 @@ namespace AppManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Reason")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -141,6 +147,9 @@ namespace AppManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Arguments")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Category")
                         .HasColumnType("TEXT");
 
@@ -148,6 +157,7 @@ namespace AppManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ExecutablePath")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IconPath")
@@ -163,10 +173,17 @@ namespace AppManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Path")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("ProcessId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("RequiresAdmin")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("RestartRequired")
                         .HasColumnType("INTEGER");
@@ -175,6 +192,9 @@ namespace AppManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Version")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkingDirectory")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -356,7 +376,9 @@ namespace AppManager.Migrations
 
                     b.HasOne("AppManager.Data.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Application");
 

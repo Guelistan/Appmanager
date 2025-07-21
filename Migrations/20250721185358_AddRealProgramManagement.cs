@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppManager.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AddRealProgramManagement : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,13 +16,17 @@ namespace AppManager.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    ExecutablePath = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     IsStarted = table.Column<bool>(type: "INTEGER", nullable: false),
                     RestartRequired = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ExecutablePath = table.Column<string>(type: "TEXT", nullable: false),
+                    ProcessId = table.Column<int>(type: "INTEGER", nullable: true),
+                    WorkingDirectory = table.Column<string>(type: "TEXT", nullable: true),
+                    Arguments = table.Column<string>(type: "TEXT", nullable: true),
+                    RequiresAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
                     LastLaunchTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastLaunchReason = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     IconPath = table.Column<string>(type: "TEXT", nullable: true),
                     Version = table.Column<string>(type: "TEXT", nullable: true),
                     Category = table.Column<string>(type: "TEXT", nullable: true),
@@ -123,9 +127,10 @@ namespace AppManager.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ApplicationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    Action = table.Column<string>(type: "TEXT", nullable: false),
                     LaunchTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Reason = table.Column<string>(type: "TEXT", nullable: true)
+                    Reason = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,7 +145,8 @@ namespace AppManager.Migrations
                         name: "FK_AppLaunchHistories_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

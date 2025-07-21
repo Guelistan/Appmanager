@@ -36,18 +36,23 @@ else
                     {
                         <p style="color:orange;">⚠️ Neustart erforderlich</p>
                     }
-                    <form method="post">
-                        <input type="hidden" name="AppId" value="@app.Id" />
-                        
-                        <!-- Optional: Grund eingeben -->
-                        <div class="mb-2">
-                            <input type="text" name="customReason" class="form-control form-control-sm" 
-                                   placeholder="Grund (optional)" />
-                        </div>
-                        
-                        <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
-                        <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
-                        <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
+                    <!-- Korrigierte Forms: -->
+                    <form method="post" asp-page-handler="Start" style="display:inline;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
+                        <button type="submit" class="btn-start">▶️ Start</button>
+                    </form>
+
+                    <form method="post" asp-page-handler="Stop" style="display:inline;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
+                        <button type="submit" class="btn-stop">⏹️ Stop</button>
+                    </form>
+
+                    <form method="post" asp-page-handler="Restart" style="display:inline;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
+                        <button type="submit" class="btn-restart">🔄 Restart</button>
                     </form>
                 </div>
             </div>

@@ -1,6 +1,7 @@
+#nullable enable
 using System;
+using System.ComponentModel.DataAnnotations;
 using AppManager.Data;
-using AppManager.Models;
 
 namespace AppManager.Models
 {
@@ -8,18 +9,18 @@ namespace AppManager.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        // ✔ Verbindlich (nicht-nullable) GUID
         public Guid ApplicationId { get; set; }
 
-        public Application Application { get; set; }
+        public Application? Application { get; set; }
 
-        // ✔ String UserId reicht (wenn Identity verwendet wird)
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
-        public AppUser User { get; set; }
+        public string Action { get; set; } = string.Empty;
+
+        public AppUser? User { get; set; }
 
         public DateTime LaunchTime { get; set; }
 
-        public string Reason { get; set; }
+        public string Reason { get; set; } = string.Empty;
     }
 }

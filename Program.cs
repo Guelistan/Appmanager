@@ -12,6 +12,7 @@ using AppManager.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AppManager.Services;
 using System;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,9 @@ builder.Services.AddHttpLogging(logging =>
     logging.LoggingFields = HttpLoggingFields.All;
 });
 
+// Fehlende Service-Registrierung hinzufügen:
+builder.Services.AddScoped<ProgramManagerService>();
+
 var app = builder.Build();
 
 // ⚠️ Fehlerbehandlung
@@ -57,13 +61,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 // 📡 Middleware-Pipeline
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseHttpLogging();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapRazorPages();
 
 // 🧪 Initiales Datenbank-Seeding (Rollen, Admin, Anwendungen)
 using (var scope = app.Services.CreateScope())
@@ -141,5 +138,22 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+var apps = new List<Application>
+{
+    new() { Name = "Rechner", Description = "Windows Rechner", ExecutablePath = "calc.exe" },
+    new() { Name = "Notepad", Description = "Windows Editor", ExecutablePath = "notepad.exe" },
+    new() { Name = "Paint", Description = "Windows Paint", ExecutablePath = "mspaint.exe" },
+    new() { Name = "Task Manager", Description = "Windows Task Manager", ExecutablePath = "taskmgr.exe", RequiresAdmin = true },
+    new() { Name = "Command Prompt", Description = "Eingabeaufforderung", ExecutablePath = "cmd.exe" }
+};
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseHttpLogging();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapRazorPages();
+app.MapControllers();
 // 🚀 Anwendung starten
 app.Run();
