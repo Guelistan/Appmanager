@@ -9,10 +9,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>ApplicationId</th>
-            <th>UserId</th>
-            <th>Startzeitpunkt</th>
+            <th>Anwendung</th>
+            <th>Benutzer</th>
+            <th>Zeitpunkt</th>
+            <th>Aktion</th>
             <th>Grund</th>
         </tr>
     </thead>
@@ -22,10 +22,36 @@
             foreach (var item in Model.History)
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.ApplicationId</td>
-                    <td>@item.UserId</td>
-                    <td>@item.LaunchTime.ToString("g")</td>
+                    <td>@(item.Application?.Name ?? "Unbekannt")</td>
+                    <td>
+                        @if (item.User != null)
+                        {
+                            @($"{item.User.Vorname} {item.User.Nachname} ({item.User.UserName})")
+                        }
+                        else
+                        {
+                            <span class="text-muted">System</span>
+                        }
+                    </td>
+                    <td>@item.LaunchTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                    <td>
+                        @if (item.Reason.Contains("gestartet"))
+                        {
+                            <span class="badge bg-success">Start</span>
+                        }
+                        else if (item.Reason.Contains("gestoppt"))
+                        {
+                            <span class="badge bg-danger">Stop</span>
+                        }
+                        else if (item.Reason.Contains("neu gestartet") || item.Reason.Contains("Neustart"))
+                        {
+                            <span class="badge bg-warning">Neustart</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Aktion</span>
+                        }
+                    </td>
                     <td>@item.Reason</td>
                 </tr>
             }

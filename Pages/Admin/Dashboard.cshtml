@@ -38,6 +38,13 @@ else
                     }
                     <form method="post">
                         <input type="hidden" name="AppId" value="@app.Id" />
+                        
+                        <!-- Optional: Grund eingeben -->
+                        <div class="mb-2">
+                            <input type="text" name="customReason" class="form-control form-control-sm" 
+                                   placeholder="Grund (optional)" />
+                        </div>
+                        
                         <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
                         <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
                         <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>

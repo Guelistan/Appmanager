@@ -25,7 +25,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // 🔐 Identity-Konfiguration
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     {
-        options.SignIn.RequireConfirmedEmail = true;
+        options.SignIn.RequireConfirmedEmail = false;  // Username-Login ohne E-Mail-Bestätigung
+        options.User.RequireUniqueEmail = false;       // Username als primärer Login
     })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -114,19 +115,22 @@ using (var scope = app.Services.CreateScope())
     }
 
     // Hauptadmin anlegen
-    var email = "hauptadmin@app.com";
-    var password = "Hauptadmin123!";
+    var username = "admin";
+    var email = "admin@appmanager.local";
+    var password = "Admin123!";
 
-    var admin = await userManager.FindByEmailAsync(email);
+    var admin = await userManager.FindByNameAsync(username);
     if (admin == null)
     {
         admin = new AppUser
         {
-            UserName = email,
+            UserName = username,
             Email = email,
             EmailConfirmed = true,
-            Vorname = "Hauptadmin",
-            IsActive = true
+            Vorname = "Administrator",
+            Nachname = "System",
+            IsActive = true,
+            IsGlobalAdmin = true
         };
         await userManager.CreateAsync(admin, password);
     }

@@ -26,7 +26,7 @@ namespace AppManager.Pages.Account
         public class LoginInput
         {
             [Required]
-            public string Email { get; set; }
+            public string Username { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -43,10 +43,10 @@ namespace AppManager.Pages.Account
         {
             if (!ModelState.IsValid) return Page();
 
-            var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null || !user.EmailConfirmed)
+            var user = await _userManager.FindByNameAsync(Input.Username);
+            if (user == null || !user.IsActive)
             {
-                ModelState.AddModelError(string.Empty, "Ungültige Anmeldedaten oder E-Mail nicht bestätigt.");
+                ModelState.AddModelError(string.Empty, "Ungültige Anmeldedaten oder Benutzer ist inaktiv.");
                 return Page();
             }
 

@@ -302,3 +302,4 @@ C:\Users\user\OneDrive\Desktop\AppManager\obj\Debug\net9.0\refint\AppManager.dll
 C:\Users\user\OneDrive\Desktop\AppManager\obj\Debug\net9.0\AppManager.pdb
 C:\Users\user\OneDrive\Desktop\AppManager\obj\Debug\net9.0\AppManager.genruntimeconfig.cache
 C:\Users\user\OneDrive\Desktop\AppManager\obj\Debug\net9.0\ref\AppManager.dll
+C:\Users\user\OneDrive\Desktop\AppManager\bin\Debug\net9.0\appsettings.Production.json

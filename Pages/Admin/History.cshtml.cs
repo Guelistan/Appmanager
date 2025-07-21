@@ -5,6 +5,7 @@ using AppManager.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace AppManager.Pages.Admin
 {
@@ -22,6 +23,9 @@ namespace AppManager.Pages.Admin
         public async Task OnGetAsync()
         {
             History = await _context.AppLaunchHistories
+                .Include(h => h.User)        // Benutzerinformationen laden
+                .Include(h => h.Application) // App-Informationen laden
+                .OrderByDescending(h => h.LaunchTime)
                 .AsNoTracking()
                 .ToListAsync();
         }

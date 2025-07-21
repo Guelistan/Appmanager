@@ -41,7 +41,7 @@ namespace AppManager.Pages.Admin
                 .ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync(Guid AppId, string action)
+        public async Task<IActionResult> OnPostAsync(Guid AppId, string action, string customReason = "")
         {
             var app = await _context.Applications.FindAsync(AppId);
             if (app == null) return NotFound();
@@ -53,17 +53,18 @@ namespace AppManager.Pages.Admin
             {
                 case "start":
                     app.IsStarted = true;
-                    reason = "Manuell gestartet";
+                    reason = !string.IsNullOrEmpty(customReason) ? customReason : "Manuell gestartet";
                     app.LastLaunchTime = now;
                     break;
                 case "stop":
                     app.IsStarted = false;
-                    reason = "Manuell gestoppt";
+                    reason = !string.IsNullOrEmpty(customReason) ? customReason : "Manuell gestoppt";
                     break;
                 case "restart":
                     app.IsStarted = true;
                     app.RestartRequired = false;
-                    reason = "Manuell neu gestartet";
+                    reason = !string.IsNullOrEmpty(customReason) ? customReason :
+                             (app.RestartRequired ? "Neustart erforderlich" : "Manuell neu gestartet");
                     app.LastLaunchTime = now;
                     break;
             }
