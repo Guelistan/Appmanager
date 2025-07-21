@@ -17,20 +17,6 @@ namespace AppManager.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
-            modelBuilder.Entity("AppManager.Data.AppDbContext+ActivityLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
-                });
-
             modelBuilder.Entity("AppManager.Data.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -121,12 +107,12 @@ namespace AppManager.Migrations
 
             modelBuilder.Entity("AppManager.Models.AppLaunchHistory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("ApplicationId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LaunchTime")
                         .HasColumnType("TEXT");
@@ -134,21 +120,23 @@ namespace AppManager.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AppLaunchHistories");
                 });
 
             modelBuilder.Entity("AppManager.Models.Application", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Category")
                         .HasColumnType("TEXT");
@@ -209,6 +197,22 @@ namespace AppManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LogEntries");
+                });
+
+            modelBuilder.Entity("AppManager.Pages.Admin.HistoryModel+ActivityLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -341,9 +345,29 @@ namespace AppManager.Migrations
 
             modelBuilder.Entity("AppManager.Models.AppLaunchHistory", b =>
                 {
-                    b.HasOne("AppManager.Models.Application", null)
+                    b.HasOne("AppManager.Models.Application", "Application")
                         .WithMany("LaunchHistory")
-                        .HasForeignKey("ApplicationId");
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppManager.Data.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Application");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AppManager.Pages.Admin.HistoryModel+ActivityLog", b =>
+                {
+                    b.HasOne("AppManager.Data.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

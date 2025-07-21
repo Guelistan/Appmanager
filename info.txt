@@ -81,3 +81,4 @@ git remote add origin https://github.com/username/repo.git
 git push -u origin main
 
 
+taskkill /F /IM AppManager.exe Laufende Anwendung stoppen

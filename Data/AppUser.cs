@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AppManager.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using AppManager.Pages.Admin;
 
 
 namespace AppManager.Data
@@ -33,22 +34,28 @@ namespace AppManager.Data
 
         //public new DbSet<AppUser> Users { get; set; }
         public DbSet<Application> Applications { get; set; }
-        public DbSet<ActivityLog> Logs { get; set; }
+        public DbSet<HistoryModel.ActivityLog> Logs { get; set; }
         public DbSet<LogEntry> LogEntries { get; set; }
-        public new DbSet<AppUser> Users { get; set; }
+
 
         public DbSet<AppLaunchHistory> AppLaunchHistories { get; set; }
+
 
         public List<AppUser> GetUsersOrderedByCreationDate()
         {
             return Users.OrderByDescending(u => u.CreatedAt).ToList();
         }
 
-        public class ActivityLog
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            public int Id { get; set; }
-            public string UserId { get; set; }
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<HistoryModel.ActivityLog>()
+                .HasOne(log => log.User)
+                .WithMany()
+                .HasForeignKey(log => log.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-        
+
     }
 }

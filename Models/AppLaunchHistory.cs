@@ -1,21 +1,25 @@
 using System;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using AppManager.Models;
 using AppManager.Data;
-using System.Linq;
-
+using AppManager.Models;
 
 namespace AppManager.Models
 {
-    // Repräsentiert einen Startverlaufseintrag
     public class AppLaunchHistory
     {
-        public int Id { get; set; }
-        public int? ApplicationId { get; set; }
-        public int? UserId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        // ✔ Verbindlich (nicht-nullable) GUID
+        public Guid ApplicationId { get; set; }
+
+        public Application Application { get; set; }
+
+        // ✔ String UserId reicht (wenn Identity verwendet wird)
+        public string UserId { get; set; }
+
+        public AppUser User { get; set; }
+
         public DateTime LaunchTime { get; set; }
+
         public string Reason { get; set; }
     }
 }
-

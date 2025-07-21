@@ -1,4 +1,4 @@
- @page
+@page
 @model AppManager.Pages.Admin.DashboardModel
 @using AppManager.Models
 @using Microsoft.AspNetCore.Authorization
@@ -96,3 +96,34 @@ else
         }
     </tbody>
 </table>
+
+<!-- Start-Historie außerhalb der App-Tabelle -->
+<h3 class="mt-5">🕓 Start-Historie</h3>
+@if (Model.LaunchHistory?.Any() == true)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>App</th>
+                <th>Benutzer</th>
+                <th>Zeitpunkt</th>
+                <th>Grund</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model.LaunchHistory)
+            {
+                <tr>
+                    <td>@entry.Application?.Name</td>
+                    <td>@entry.UserId</td>
+                    <td>@entry.LaunchTime.ToString("g")</td>
+                    <td>@entry.Reason</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted"><em>Keine Start-Historie vorhanden.</em></p>
+}
