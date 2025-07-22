@@ -29,6 +29,7 @@ namespace AppManager.Pages.Admin
 
         public List<Application> Applications { get; set; } = new();
         public List<AppLaunchHistory> LaunchHistory { get; set; } = new();
+        public Dictionary<Guid, bool> RestartRequiredMap { get; set; } = new();
 
         public async Task OnGetAsync()
         {
@@ -41,9 +42,60 @@ namespace AppManager.Pages.Admin
                 .Include(h => h.Application)
                 .Include(h => h.User)
                 .OrderByDescending(h => h.LaunchTime)
-                .Take(20)
+                .Take(100) // Lade mehr Historie für bessere Analyse
                 .ToListAsync();
             Console.WriteLine($"📝 {LaunchHistory.Count} Historie-Einträge geladen");
+
+            // 🧠 Intelligente "Neustart erforderlich" Logik basierend auf Historie
+            foreach (var app in Applications)
+            {
+                RestartRequiredMap[app.Id] = IsRestartRequired(app, LaunchHistory);
+                // Aktualisiere das Application-Objekt mit der berechneten Logik
+                app.RestartRequired = RestartRequiredMap[app.Id];
+            }
+        }
+
+        /// <summary>
+        /// 🧠 Intelligente Logik: Bestimmt ob ein Neustart erforderlich ist
+        /// basierend auf der Start-Historie der letzten Aktionen
+        /// </summary>
+        private bool IsRestartRequired(Application app, List<AppLaunchHistory> allHistory)
+        {
+            // Filtere die letzten 5 Einträge für diese spezifische App
+            var recentHistory = allHistory
+                .Where(h => h.ApplicationId == app.Id)
+                .OrderByDescending(h => h.LaunchTime)
+                .Take(5)
+                .ToList();
+
+            if (!recentHistory.Any())
+            {
+                // Keine Historie = kein Neustart erforderlich
+                return false;
+            }
+
+            // 🔍 Prüfe verschiedene Bedingungen für "Neustart erforderlich"
+            bool hasFailedStart = recentHistory.Any(h =>
+                h.Action == "Start" && h.Reason.Contains("fehlgeschlagen", StringComparison.OrdinalIgnoreCase));
+
+            bool hasFailedRestart = recentHistory.Any(h =>
+                h.Action == "Restart" && h.Reason.Contains("fehlgeschlagen", StringComparison.OrdinalIgnoreCase));
+
+            bool hasMultipleFailures = recentHistory.Count(h =>
+                h.Reason.Contains("fehlgeschlagen", StringComparison.OrdinalIgnoreCase)) >= 2;
+
+            // 📊 Neustart erforderlich wenn:
+            // - Letzter Start fehlgeschlagen ODER
+            // - Letzter Restart fehlgeschlagen ODER  
+            // - Mehrere Fehlschläge in letzten 5 Aktionen
+            bool restartRequired = hasFailedStart || hasFailedRestart || hasMultipleFailures;
+
+            if (restartRequired)
+            {
+                Console.WriteLine($"⚠️ {app.Name}: Neustart erforderlich (Failed Start: {hasFailedStart}, Failed Restart: {hasFailedRestart}, Multiple Failures: {hasMultipleFailures})");
+            }
+
+            return restartRequired;
         }
 
         // 🔍 DEBUG-VERSION: START-HANDLER

@@ -32,9 +32,16 @@ else
                             <span style="color:red;">🔴 Gestoppt</span>
                         }
                     </p>
-                    @if (app.RestartRequired)
+                    @{
+                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) && Model.RestartRequiredMap[app.Id];
+                    }
+                    @if (intelligentRestartRequired)
                     {
-                        <p style="color:orange;">⚠️ Neustart erforderlich</p>
+                        <p style="color:orange;">⚠️ Neustart erforderlich (basierend auf Historie)</p>
+                    }
+                    else if (app.RestartRequired)
+                    {
+                        <p style="color:orange;">⚠️ Neustart erforderlich (manuell gesetzt)</p>
                     }
                     <!-- Korrigierte Forms: -->
                     <form method="post" asp-page-handler="Start" style="display:inline;">
@@ -90,13 +97,20 @@ else
                     }
                 </td>
                 <td>
-                    @if (app.RestartRequired)
+                    @{
+                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) && Model.RestartRequiredMap[app.Id];
+                    }
+                    @if (intelligentRestartRequired)
                     {
-                        <span style="color:orange;">Ja</span>
+                        <span style="color:orange;">⚠️ Ja (Historie)</span>
+                    }
+                    else if (app.RestartRequired)
+                    {
+                        <span style="color:orange;">⚠️ Ja (manuell)</span>
                     }
                     else
                     {
-                        <span>Nein</span>
+                        <span style="color:green;">✅ Nein</span>
                     }
                 </td>
                 <td>
