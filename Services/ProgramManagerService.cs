@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using AppManager.Models;
 
@@ -8,98 +7,87 @@ namespace AppManager.Services
 {
     public class ProgramManagerService
     {
-        public Task<bool> StartProgramAsync(Application app) // ← async entfernt, da nicht verwendet
+        public async Task<bool> StartProgramAsync(Application app)
         {
-            try
+            return await Task.Run(() =>
             {
-                if (!File.Exists(app.ExecutablePath))
+                try
                 {
-                    return Task.FromResult(false);
+                    Console.WriteLine($"🚀 Versuche zu starten: {app.ExecutablePath}");
+                    
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = app.ExecutablePath,
+                        UseShellExecute = true,
+                        CreateNoWindow = false,
+                        WorkingDirectory = string.IsNullOrEmpty(app.WorkingDirectory) 
+                            ? Environment.GetFolderPath(Environment.SpecialFolder.System) 
+                            : app.WorkingDirectory
+                    };
+
+                    if (!string.IsNullOrEmpty(app.Arguments))
+                    {
+                        startInfo.Arguments = app.Arguments;
+                    }
+
+                    var process = Process.Start(startInfo);
+                    
+                    if (process != null)
+                    {
+                        app.ProcessId = process.Id;
+                        app.IsStarted = true;
+                        Console.WriteLine($"✅ Erfolgreich gestartet! PID: {process.Id}");
+                        return true;
+                    }
+
+                    Console.WriteLine("❌ Process.Start() gab null zurück");
+                    return false;
                 }
-
-                var startInfo = new ProcessStartInfo
+                catch (Exception ex)
                 {
-                    FileName = app.ExecutablePath,
-                    Arguments = app.Arguments,
-                    WorkingDirectory = string.IsNullOrEmpty(app.WorkingDirectory)
-                        ? Path.GetDirectoryName(app.ExecutablePath) ?? string.Empty
-                        : app.WorkingDirectory,
-                    UseShellExecute = true,
-                    CreateNoWindow = false
-                };
-
-                if (app.RequiresAdmin)
-                {
-                    startInfo.Verb = "runas";
+                    Console.WriteLine($"❌ FEHLER beim Starten von {app.Name}: {ex.Message}");
+                    return false;
                 }
-
-                var process = Process.Start(startInfo);
-
-                if (process != null)
-                {
-                    app.ProcessId = process.Id;
-                    app.IsStarted = true;
-                    return Task.FromResult(true);
-                }
-
-                return Task.FromResult(false);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Fehler beim Starten von {app.Name}: {ex.Message}");
-                return Task.FromResult(false);
-            }
+            });
         }
 
-        public Task<bool> StopProgramAsync(Application app) // ← async entfernt
+        public async Task<bool> StopProgramAsync(Application app)
         {
-            try
+            return await Task.Run(() =>
             {
-                if (app.ProcessId.HasValue)
+                try
                 {
-                    var process = Process.GetProcessById(app.ProcessId.Value);
-
-                    if (!process.HasExited)
+                    if (app.ProcessId.HasValue)
                     {
-                        process.CloseMainWindow();
-
-                        if (!process.WaitForExit(5000))
+                        var process = Process.GetProcessById(app.ProcessId.Value);
+                        if (!process.HasExited)
                         {
-                            process.Kill();
+                            process.CloseMainWindow();
+                            if (!process.WaitForExit(3000))
+                            {
+                                process.Kill();
+                            }
                         }
                     }
+
+                    app.IsStarted = false;
+                    app.ProcessId = null;
+                    Console.WriteLine($"⏹️ {app.Name} gestoppt");
+                    return true;
                 }
-
-                app.IsStarted = false;
-                app.ProcessId = null;
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Fehler beim Stoppen von {app.Name}: {ex.Message}");
-                app.IsStarted = false;
-                app.ProcessId = null;
-                return Task.FromResult(false);
-            }
-        }
-
-        public bool IsProgramRunning(Application app)
-        {
-            if (!app.ProcessId.HasValue) return false;
-
-            try
-            {
-                var process = Process.GetProcessById(app.ProcessId.Value);
-                return !process.HasExited;
-            }
-            catch
-            {
-                return false;
-            }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Fehler beim Stoppen: {ex.Message}");
+                    app.IsStarted = false;
+                    app.ProcessId = null;
+                    return false;
+                }
+            });
         }
 
         public async Task<bool> RestartProgramAsync(Application app)
         {
+            Console.WriteLine($"🔄 Neustart von {app.Name}...");
             await StopProgramAsync(app);
             await Task.Delay(2000);
             return await StartProgramAsync(app);

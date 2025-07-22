@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250721190516_AddProgramManagementFields")]
-    partial class AddProgramManagementFields
+    [Migration("20250722091205_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

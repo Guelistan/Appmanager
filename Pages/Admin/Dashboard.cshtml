@@ -39,19 +39,22 @@ else
                     <!-- Korrigierte Forms: -->
                     <form method="post" asp-page-handler="Start" style="display:inline;">
                         <input type="hidden" name="appId" value="@app.Id" />
-                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
-                        <button type="submit" class="btn-start">▶️ Start</button>
+                        <input type="text" name="customReason" placeholder="Grund (optional)"
+                            style="width:200px; margin-bottom:5px;" />
+                        <button type="submit" class="btn btn-success">▶️ Start</button>
                     </form>
 
                     <form method="post" asp-page-handler="Stop" style="display:inline;">
                         <input type="hidden" name="appId" value="@app.Id" />
-                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
+                        <input type="text" name="customReason" placeholder="Grund (optional)"
+                            style="width:200px; margin-bottom:5px;" />
                         <button type="submit" class="btn-stop">⏹️ Stop</button>
                     </form>
 
                     <form method="post" asp-page-handler="Restart" style="display:inline;">
                         <input type="hidden" name="appId" value="@app.Id" />
-                        <input type="text" name="customReason" placeholder="Grund (optional)" style="width:200px; margin-bottom:5px;" />
+                        <input type="text" name="customReason" placeholder="Grund (optional)"
+                            style="width:200px; margin-bottom:5px;" />
                         <button type="submit" class="btn-restart">🔄 Restart</button>
                     </form>
                 </div>
@@ -117,6 +120,7 @@ else
         <thead>
             <tr>
                 <th>App</th>
+                <th>Aktion</th>
                 <th>Benutzer</th>
                 <th>Zeitpunkt</th>
                 <th>Grund</th>
@@ -126,9 +130,36 @@ else
             @foreach (var entry in Model.LaunchHistory)
             {
                 <tr>
-                    <td>@entry.Application?.Name</td>
-                    <td>@entry.UserId</td>
-                    <td>@entry.LaunchTime.ToString("g")</td>
+                    <td>@(entry.Application?.Name ?? "Unbekannt")</td>
+                    <td>
+                        @if (entry.Action == "Start")
+                        {
+                            <span class="badge bg-success">▶️ Start</span>
+                        }
+                        else if (entry.Action == "Stop")
+                        {
+                            <span class="badge bg-danger">⏹️ Stop</span>
+                        }
+                        else if (entry.Action == "Restart")
+                        {
+                            <span class="badge bg-warning">🔄 Restart</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">@entry.Action</span>
+                        }
+                    </td>
+                    <td>
+                        @if (entry.User != null)
+                        {
+                            <span>@entry.User.Vorname @entry.User.Nachname</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">System</span>
+                        }
+                    </td>
+                    <td>@entry.LaunchTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
                     <td>@entry.Reason</td>
                 </tr>
             }
@@ -139,3 +170,11 @@ else
 {
     <p class="text-muted"><em>Keine Start-Historie vorhanden.</em></p>
 }
+
+
+
+
+
+
+
+

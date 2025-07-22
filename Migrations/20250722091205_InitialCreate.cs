@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppManager.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRealProgramManagement : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -128,8 +128,8 @@ namespace AppManager.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ApplicationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    Action = table.Column<string>(type: "TEXT", nullable: false),
                     LaunchTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Action = table.Column<string>(type: "TEXT", nullable: false),
                     Reason = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

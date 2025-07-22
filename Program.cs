@@ -72,25 +72,52 @@ using (var scope = app.Services.CreateScope())
 
     context.Database.Migrate();
 
+    // 🔧 Korrigiere fehlerhafte App-Pfade direkt in der Datenbank
+    var existingApps = context.Applications.ToList();
+    foreach (var appToFix in existingApps)
+    {
+        if (appToFix.ExecutablePath.StartsWith("/Desktop/") || !appToFix.ExecutablePath.Contains(@"\"))
+        {
+            string correctedPath = appToFix.ExecutablePath switch
+            {
+                "/Desktop/Browser" => @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                "/Desktop/Notepad" => @"C:\Windows\System32\notepad.exe",
+                "/Desktop/Calculator" => @"C:\Windows\System32\calc.exe",
+                "/Desktop/WetterApp" => @"C:\Windows\System32\mspaint.exe",
+                _ when appToFix.Name.Contains("Browser") => @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                _ when appToFix.Name.Contains("Notepad") => @"C:\Windows\System32\notepad.exe",
+                _ when appToFix.Name.Contains("Calculator") => @"C:\Windows\System32\calc.exe",
+                _ when appToFix.Name.Contains("Paint") || appToFix.Name.Contains("Wetter") => @"C:\Windows\System32\mspaint.exe",
+                _ when appToFix.Name.Contains("Manager") => @"C:\Windows\System32\taskmgr.exe",
+                _ => appToFix.ExecutablePath
+            };
+            
+            if (correctedPath != appToFix.ExecutablePath)
+            {
+                Console.WriteLine($"✅ Korrigiere: '{appToFix.ExecutablePath}' → '{correctedPath}'");
+                appToFix.ExecutablePath = correctedPath;
+                if (string.IsNullOrEmpty(appToFix.WorkingDirectory))
+                {
+                    appToFix.WorkingDirectory = @"C:\Windows\System32";
+                }
+            }
+        }
+    }
+    context.SaveChanges();
+
     // Anwendungen seeden
     if (!context.Applications.Any())
-
-
     {
-        context.Applications.AddRange(
-            new Application { Name = "App Manager", IsStarted = true, RestartRequired = false },
-            new Application { Name = "Test App", IsStarted = false, RestartRequired = true },
-            new Application { Name = "Demo App", IsStarted = true, RestartRequired = false },
-            new Application { Name = "Beispiel App", IsStarted = false, RestartRequired = true },
-            new Application { Name = "App 1", IsStarted = false, RestartRequired = false },
-            new Application { Name = "App 2", IsStarted = true, RestartRequired = true },
-            new Application { Name = "/Desktop/Notepad", IsStarted = false, RestartRequired = false },
-            new Application { Name = "/Desktop/Calculator", IsStarted = true, RestartRequired = false },
-            new Application { Name = "/Desktop/Browser", IsStarted = false, RestartRequired = true },
-            new Application { Name = "/Desktop/WetterApp", IsStarted = false, RestartRequired = true }
-        );
+        var apps = new List<Application>
+        {
+            new() { Name = "Rechner", Description = "Windows Rechner", ExecutablePath = @"C:\Windows\System32\calc.exe", WorkingDirectory = @"C:\Windows\System32" },
+            new() { Name = "Notepad", Description = "Windows Editor", ExecutablePath = @"C:\Windows\System32\notepad.exe", WorkingDirectory = @"C:\Windows\System32" },
+            new() { Name = "Paint", Description = "Windows Paint", ExecutablePath = @"C:\Windows\System32\mspaint.exe", WorkingDirectory = @"C:\Windows\System32" },
+            new() { Name = "Task Manager", Description = "Windows Task Manager", ExecutablePath = @"C:\Windows\System32\taskmgr.exe", WorkingDirectory = @"C:\Windows\System32", RequiresAdmin = true },
+            new() { Name = "Command Prompt", Description = "Eingabeaufforderung", ExecutablePath = @"C:\Windows\System32\cmd.exe", WorkingDirectory = @"C:\Windows\System32" }
+        };
 
-
+        context.Applications.AddRange(apps);
         context.SaveChanges();
     }
 
@@ -137,15 +164,6 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(admin, "SuperAdmin");
     }
 }
-
-var apps = new List<Application>
-{
-    new() { Name = "Rechner", Description = "Windows Rechner", ExecutablePath = "calc.exe" },
-    new() { Name = "Notepad", Description = "Windows Editor", ExecutablePath = "notepad.exe" },
-    new() { Name = "Paint", Description = "Windows Paint", ExecutablePath = "mspaint.exe" },
-    new() { Name = "Task Manager", Description = "Windows Task Manager", ExecutablePath = "taskmgr.exe", RequiresAdmin = true },
-    new() { Name = "Command Prompt", Description = "Eingabeaufforderung", ExecutablePath = "cmd.exe" }
-};
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
