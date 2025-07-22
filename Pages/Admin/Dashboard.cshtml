@@ -100,11 +100,25 @@ else
                     }
                 </td>
                 <td>
-                    <form method="post" style="display:inline;">
-                        <input type="hidden" name="AppId" value="@app.Id" />
-                        <button name="action" value="start" class="btn btn-success btn-sm">Start</button>
-                        <button name="action" value="stop" class="btn btn-danger btn-sm">Stop</button>
-                        <button name="action" value="restart" class="btn btn-warning btn-sm">Neustart</button>
+                    <!-- Start Button -->
+                    <form method="post" asp-page-handler="Start" style="display:inline; margin-right:5px;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="hidden" name="customReason" value="Tabellen-Start" />
+                        <button type="submit" class="btn-start btn-sm">▶️ Start</button>
+                    </form>
+
+                    <!-- Stop Button -->
+                    <form method="post" asp-page-handler="Stop" style="display:inline; margin-right:5px;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="hidden" name="customReason" value="Tabellen-Stop" />
+                        <button type="submit" class="btn-stop btn-sm">⏹️ Stop</button>
+                    </form>
+
+                    <!-- Restart Button -->
+                    <form method="post" asp-page-handler="Restart" style="display:inline;">
+                        <input type="hidden" name="appId" value="@app.Id" />
+                        <input type="hidden" name="customReason" value="Tabellen-Restart" />
+                        <button type="submit" class="btn-restart btn-sm">🔄 Restart</button>
                     </form>
                 </td>
             </tr>
