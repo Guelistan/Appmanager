@@ -1,76 +1,78 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿ /* Hintergrund für die gesamte Seite */
+ html,
+ body {
+   background: linear-gradient(to bottom right, #11b0e6, #a1e3ff);
+   font-family: 'Segoe UI', sans-serif;
+   min-height: 100vh;
+   margin: 0;
+   padding: 0;
+   color: #333;
+ }
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
+ /* Header-Stil */
+ header {
+   background: linear-gradient(45deg, purple, yellow);
+   color: white;
+   padding: 1rem;
+   text-align: center;
+   font-size: 1.5rem;
+   font-weight: bold;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+ }
 
-a {
-  color: #0077cc;
-}
+ /* Karten-Stil */
+ .card {
+   background-color: rgba(255, 255, 255, 0.9);
+   border-radius: 8px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   transition: transform 0.2s ease;
+ }
 
-.btn:hover {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
+ .card:hover {
+   transform: scale(1.02);
+ }
 
-.nav-pills .nav-link.active,
-.nav-pills .show>.nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
+ /* Tabellen-Stil */
+ .table {
+   background-color: rgba(255, 255, 255, 0.95);
+   border-radius: 6px;
+   overflow: hidden;
+ }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
+ .table th {
+   background-color: #007acc;
+   color: white;
+ }
 
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
+ .table td {
+   vertical-align: middle;
+ }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
+ /* Buttons */
+ .btn-success,
+ .btn-start {
+   background-color: #28a745;
+   color: white;
+ }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
+ .btn-stop {
+   background-color: #dc3545;
+   color: white;
+ }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
+ .btn-restart {
+   background-color: #ffc107;
+   color: black;
+ }
 
-.card-app {
-  background-color: #f0f8ff;
-  border: 2px solid #c99bff;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+ /* Kleine Buttons */
+ .btn-sm {
+   padding: 0.25rem 0.5rem;
+   font-size: 0.875rem;
+ }
 
-.btn-start {
-  background-color: #28a745;
-  color: white;
-  margin-right: 10px;
-}
-
-.btn-stop {
-  background-color: #dc3545;
-  color: white;
-  margin-right: 10px;
-}
-
-.btn-restart {
-  background-color: #ffc107;
-  color: black;
-}
+ /* Responsive Spacing */
+ .row {
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+ }

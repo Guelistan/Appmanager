@@ -91,7 +91,7 @@ using (var scope = app.Services.CreateScope())
                 _ when appToFix.Name.Contains("Manager") => @"C:\Windows\System32\taskmgr.exe",
                 _ => appToFix.ExecutablePath
             };
-            
+
             if (correctedPath != appToFix.ExecutablePath)
             {
                 Console.WriteLine($"✅ Korrigiere: '{appToFix.ExecutablePath}' → '{correctedPath}'");

@@ -1,11 +1,10 @@
 ASP.NET Core Web App mit C# und Visual Studio Code:
 
-Andere Anwendungen auf dem Server starten und stoppen kann.
+Eine WebApplication die Andere Anwendungen auf dem Server starten und stoppen kann.
 Benutzerberechtigungen verwaltet.
 Eine Datenbank verwendet.
 Einen Web-Administratorbereich bietet, um den Zustand der Anwendungen zu überwachen.
-Zunächst mit Platzhalter-Apps arbeitet, die später durch echte ersetzt werden.
-Ich helfe dir gerne Schritt für Schritt dabei. Hier ist ein Vorschlag für den Aufbau und die nächsten Schritte:
+Zunächst mit Platzhalter-Apps arbeitet, die später durch echte ersetzt werden:
 
 🔧 Projektstruktur (Vorschlag)
 Frontend: Razor Pages oder Blazor (je nach Präferenz)
@@ -59,7 +58,7 @@ dotnet tool install --global dotnet-ef
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 
-dotnet ef database update NameDerVorherigenMigration, ewnn migration schon angewendet,
+dotnet ef database update NameDerVorherigenMigration, wenn migration schon angewendet,
 dann erst zurückrollen.
 
 dann bearbeiten und dann wieder update.
@@ -82,3 +81,8 @@ git push -u origin main
 
 
 taskkill /F /IM AppManager.exe Laufende Anwendung stoppen
+
+dann wieder build
+dotnet list package | findstr -i kestrel
+
+dotnet add package Microsoft.AspNetCore.Server.HttpSys
