@@ -6,6 +6,7 @@ using AppManager.Data;
 using AppManager.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System;
 
 namespace AppManager.Pages.Account
 {
@@ -51,39 +52,62 @@ namespace AppManager.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine($"🔍 Registrierungs-Versuch gestartet...");
+            Console.WriteLine($"   ModelState.IsValid: {ModelState.IsValid}");
+
             if (!ModelState.IsValid)
+            {
+                Console.WriteLine("❌ ModelState ist ungültig:");
+                foreach (var modelError in ModelState)
+                {
+                    foreach (var error in modelError.Value.Errors)
+                    {
+                        Console.WriteLine($"   - {modelError.Key}: {error.ErrorMessage}");
+                    }
+                }
                 return Page();
+            }
+
+            Console.WriteLine($"✅ ModelState ist gültig. Benutzer-Daten:");
+            Console.WriteLine($"   Benutzername: '{Input.Name}'");
+            Console.WriteLine($"   E-Mail: '{Input.Email}'");
+            Console.WriteLine($"   Vorname: '{Input.Vorname}'");
+            Console.WriteLine($"   Abteilung: '{Input.Abteilung}'");
 
             var user = new AppUser
             {
-                UserName = Input.Email,
+                UserName = Input.Name, // Verwende den Namen als Username
                 Email = Input.Email,
+                Nachname = Input.Name, // Setze auch Nachname
                 Vorname = Input.Vorname,
                 Abteilung = Input.Abteilung,
-                IsActive = true
+                IsActive = true,
+                EmailConfirmed = true  // Direkt bestätigen, da wir keine E-Mail-Bestätigung benötigen
             };
 
+            Console.WriteLine($"🔧 Erstelle Benutzer in Datenbank...");
             var result = await _userManager.CreateAsync(user, Input.Passwort);
+
+            Console.WriteLine($"   CreateAsync Result: Succeeded = {result.Succeeded}");
 
             if (result.Succeeded)
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { userId = user.Id, token = token },
-                    protocol: Request.Scheme);
+                Console.WriteLine($"✅ Benutzer erfolgreich erstellt: {user.UserName}");
+                Console.WriteLine($"🔐 Automatische Anmeldung...");
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Bestätige deine E-Mail",
-                    $"Bitte bestätige dein Konto durch Klicken auf diesen Link: <a href='{confirmationUrl}'>Bestätigen</a>");
+                // Direkt anmelden ohne E-Mail-Bestätigung
+                await _signInManager.SignInAsync(user, isPersistent: false);
 
-                return RedirectToPage("/Account/Login", new { Message = "Registrierung erfolgreich. Bitte bestätige deine E-Mail." });
+                Console.WriteLine($"✅ Automatische Anmeldung erfolgreich");
+                return RedirectToPage("/Admin/Dashboard");
             }
 
+            Console.WriteLine($"❌ Benutzer-Erstellung fehlgeschlagen:");
             foreach (var error in result.Errors)
+            {
+                Console.WriteLine($"   - {error.Code}: {error.Description}");
                 ModelState.AddModelError(string.Empty, error.Description);
+            }
 
             return Page();
         }

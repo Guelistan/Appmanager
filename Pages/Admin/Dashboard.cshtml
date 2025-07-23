@@ -3,7 +3,19 @@
 @using AppManager.Models
 @using Microsoft.AspNetCore.Authorization
 
-<h2>📋 App Dashboard</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 App Dashboard</h2>
+
+    <!-- Admin Quick Actions -->
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+    {
+        <div class="btn-group" role="group">
+            <a class="btn btn-outline-primary" asp-page="/Admin/Users">👥 Users</a>
+            <a class="btn btn-outline-info" asp-page="/Admin/History">📜 History</a>
+            <a class="btn btn-outline-secondary" asp-page="/Admin/Diagrams">📊 Diagramme</a>
+        </div>
+    }
+</div>
 
 @if (User.Identity?.IsAuthenticated == true)
 {
@@ -33,7 +45,8 @@ else
                         }
                     </p>
                     @{
-                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) && Model.RestartRequiredMap[app.Id];
+                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) &&
+                        Model.RestartRequiredMap[app.Id];
                     }
                     @if (intelligentRestartRequired)
                     {
@@ -98,7 +111,8 @@ else
                 </td>
                 <td>
                     @{
-                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) && Model.RestartRequiredMap[app.Id];
+                        bool intelligentRestartRequired = Model.RestartRequiredMap.ContainsKey(app.Id) &&
+                        Model.RestartRequiredMap[app.Id];
                     }
                     @if (intelligentRestartRequired)
                     {

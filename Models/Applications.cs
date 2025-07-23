@@ -33,9 +33,22 @@ namespace AppManager.Models
         // ✨ NEU: Sicherheitslevel
         public bool RequiresAdmin { get; set; } = false;
 
+        // 🌐 IIS Integration
+        [StringLength(100)]
+        public string IISAppPoolName { get; set; } = string.Empty; // Name des IIS App Pools
+
+        [StringLength(200)]
+        public string IISSiteName { get; set; } = string.Empty; // Name der IIS-Website
+
+        public bool IsIISApplication { get; set; } = false; // Ist es eine IIS-Anwendung?
+
         public DateTime LastLaunchTime { get; set; }
         public string LastLaunchReason { get; set; }
         public List<AppLaunchHistory> LaunchHistory { get; set; } = new List<AppLaunchHistory>();
+
+        // 👥 App-Owner Berechtigungen
+        public List<AppOwnership> Owners { get; set; } = new List<AppOwnership>();
+
         public string IconPath { get; set; }
         public string Version { get; set; }
         public string Category { get; set; }

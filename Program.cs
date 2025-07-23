@@ -19,15 +19,22 @@ var builder = WebApplication.CreateBuilder(args);
 // 📧 Fake E-Mail-Sender für Entwicklung
 builder.Services.AddTransient<IEmailSender, ConsoleEmailSender>();
 
-// 📦 Datenbank mit SQLite
+// 📦 Datenbank mit SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 🔐 Identity-Konfiguration
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     {
         options.SignIn.RequireConfirmedEmail = false;  // Username-Login ohne E-Mail-Bestätigung
         options.User.RequireUniqueEmail = false;       // Username als primärer Login
+
+        // 🔓 Gelockerte Passwort-Richtlinien für einfache Registrierung
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 3;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
     })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -162,6 +169,24 @@ using (var scope = app.Services.CreateScope())
     if (!await userManager.IsInRoleAsync(admin, "SuperAdmin"))
     {
         await userManager.AddToRoleAsync(admin, "SuperAdmin");
+    }
+
+    // 🧪 Test-Daten nur für Development
+    if (app.Environment.IsDevelopment())
+    {
+        await AppManager.TestDataSeeder.SeedTestDataAsync(services);
+    }
+
+    // 🚀 Produktions-Basisdaten für alle Umgebungen
+    await AppManager.ProductionSeeder.SeedEssentialDataAsync(services);
+
+    // 🔍 Debug: Benutzer-Datenbank überprüfen
+    Console.WriteLine();
+    using (var debugScope = services.CreateScope())
+    {
+        var debugContext = debugScope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var debugUserManager = debugScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        await AppManager.DebugUserCheck.CheckUsersInDatabase(debugContext, debugUserManager);
     }
 }
 

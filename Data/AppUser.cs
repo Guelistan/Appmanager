@@ -36,9 +36,10 @@ namespace AppManager.Data
         public DbSet<Application> Applications { get; set; }
         public DbSet<HistoryModel.ActivityLog> Logs { get; set; }
         public DbSet<LogEntry> LogEntries { get; set; }
-
-
         public DbSet<AppLaunchHistory> AppLaunchHistories { get; set; }
+
+        // 👥 NEU: App-Owner Berechtigungen
+        public DbSet<AppOwnership> AppOwnerships { get; set; }
 
 
         public List<AppUser> GetUsersOrderedByCreationDate()
@@ -55,6 +56,26 @@ namespace AppManager.Data
                 .WithMany()
                 .HasForeignKey(log => log.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // 👥 App-Owner Beziehungen
+            modelBuilder.Entity<AppOwnership>()
+                .HasOne(ao => ao.User)
+                .WithMany()
+                .HasForeignKey(ao => ao.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AppOwnership>()
+                .HasOne(ao => ao.Application)
+                .WithMany(a => a.Owners)
+                .HasForeignKey(ao => ao.ApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 📊 App Launch History Beziehungen
+            modelBuilder.Entity<AppLaunchHistory>()
+                .HasOne(alh => alh.Application)
+                .WithMany(a => a.LaunchHistory)
+                .HasForeignKey(alh => alh.ApplicationId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

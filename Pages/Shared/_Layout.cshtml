@@ -28,17 +28,12 @@
                     <!-- Für eingeloggte Benutzer -->
                     <span class="navbar-text">Hallo, @User.Identity.Name!</span>
 
-                    <a class="btn btn-outline-primary" asp-page="/Account/Login">Login</a>
-                    <a class="btn btn-outline-secondary" asp-page="/Account/Register">Register</a>
                     <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
                     <a class="btn btn-outline-info" asp-page="/Admin/History">History</a>
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
-                        <a class="btn btn-outline-warning" asp-page="/Admin/Settings">Settings</a>
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
+                        <a class="btn btn-outline-primary" asp-page="/Admin/Diagrams">📊 Diagramme</a>
+                        <a class="btn btn-outline-warning" asp-page="/Admin/Users">Users</a>
                     }
 
                     <form method="post" asp-page="/Account/Logout" class="d-inline">
@@ -50,8 +45,6 @@
                     <!-- Für nicht eingeloggte Benutzer -->
                     <a class="btn btn-outline-primary" asp-page="/Account/Login">Login</a>
                     <a class="btn btn-outline-secondary" asp-page="/Account/Register">Register</a>
-                    <a class="btn btn-outline-success" asp-page="/Admin/Dashboard">Dashboard</a>
-                    <a class="btn btn-outline-info" asp-page="/Admin/History">History</a>
                 }
             </div>
         </div>

@@ -1,0 +1,244 @@
+# AppManager - Use Case Diagramm
+
+```mermaid
+graph TB
+    %% Akteure
+    Admin[👤 Administrator]
+    AppOwner[👤 App Owner]
+    RegUser[👤 Registered User]
+    System[🖥️ Windows System]
+    IIS[🌐 IIS Server]
+
+    %% Use Cases - App Management
+    subgraph "App Management"
+        UC1[Start Application]
+        UC2[Stop Application]
+        UC3[Restart Application]
+        UC4[Monitor App Status]
+        UC5[View Launch History]
+    end
+
+    %% Use Cases - Administration
+    subgraph "User & Permission Management"
+        UC6[Manage Users]
+        UC7[Assign App Ownership]
+        UC8[Remove App Ownership]
+        UC9[View Admin Dashboard]
+        UC10[Configure Applications]
+    end
+
+    %% Use Cases - System Integration
+    subgraph "System Integration"
+        UC11[Windows Authentication]
+        UC12[IIS App Pool Management]
+        UC13[Process Control]
+        UC14[Audit Logging]
+    end
+
+    %% Use Cases - Data Management
+    subgraph "Data Management"
+        UC15[Seed Test Data]
+        UC16[Seed Production Data]
+        UC17[Database Migration]
+    end
+
+    %% Beziehungen Administrator
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC15
+    Admin --> UC16
+    Admin --> UC17
+
+    %% Beziehungen App Owner
+    AppOwner --> UC1
+    AppOwner --> UC2
+    AppOwner --> UC3
+    AppOwner --> UC4
+    AppOwner --> UC5
+
+    %% Beziehungen Registered User
+    RegUser --> UC4
+    RegUser --> UC5
+
+    %% System-Integrationen
+    UC1 -.-> System
+    UC2 -.-> System
+    UC3 -.-> System
+    UC13 -.-> System
+    UC12 -.-> IIS
+    UC11 -.-> System
+    UC14 -.-> System
+
+    %% Vererbung/Erweiterung
+    UC1 -.extends.-> UC13
+    UC2 -.extends.-> UC13
+    UC3 -.extends.-> UC13
+    UC7 -.includes.-> UC11
+    UC8 -.includes.-> UC11
+
+    style Admin fill:#e1f5fe
+    style AppOwner fill:#f3e5f5
+    style RegUser fill:#e8f5e8
+    style System fill:#fff3e0
+    style IIS fill:#fce4ec
+```
+
+# AppManager - Klassendiagramm
+
+```mermaid
+classDiagram
+    %% Identity Framework Klassen
+    class AppUser {
+        +string Id
+        +string UserName
+        +string Email
+        +bool IsGlobalAdmin
+        +bool IsActive
+        +string Vorname
+        +string Nachname
+        +List~AppOwnership~ OwnedApps
+    }
+
+    class IdentityUser {
+        <<Microsoft.AspNetCore.Identity>>
+        +string Id
+        +string UserName
+        +string Email
+        +bool EmailConfirmed
+    }
+
+    %% Core Domain Models
+    class Application {
+        +Guid Id
+        +string Name
+        +string Description
+        +string ExecutablePath
+        +bool IsStarted
+        +bool RestartRequired
+        +int? ProcessId
+        +string WorkingDirectory
+        +string Arguments
+        +bool RequiresAdmin
+        +string IISAppPoolName
+        +string IISSiteName
+        +bool IsIISApplication
+        +DateTime LastLaunchTime
+        +string LastLaunchReason
+        +string IconPath
+        +string Version
+        +string Category
+        +string Tags
+        +List~AppLaunchHistory~ LaunchHistory
+        +List~AppOwnership~ Owners
+    }
+
+    class AppOwnership {
+        +int Id
+        +string UserId
+        +Guid ApplicationId
+        +string WindowsUsername
+        +string IISAppPoolName
+        +DateTime CreatedAt
+        +string CreatedBy
+        +AppUser User
+        +Application Application
+    }
+
+    class AppLaunchHistory {
+        +int Id
+        +Guid ApplicationId
+        +string UserId
+        +string WindowsUsername
+        +string IISAppPoolName
+        +string Action
+        +string Reason
+        +DateTime LaunchTime
+        +Application Application
+        +AppUser User
+    }
+
+    %% Data Access Layer
+    class AppDbContext {
+        +DbSet~AppUser~ Users
+        +DbSet~Application~ Applications
+        +DbSet~AppOwnership~ AppOwnerships
+        +DbSet~AppLaunchHistory~ AppLaunchHistories
+        +OnModelCreating(ModelBuilder)
+    }
+
+    class IdentityDbContext {
+        <<Microsoft.AspNetCore.Identity.EntityFrameworkCore>>
+    }
+
+    %% Service Layer
+    class AppService {
+        -AppDbContext context
+        +GetApplicationsAsync()
+        +GetApplicationByIdAsync(Guid)
+        +StartApplicationAsync(Guid, string)
+        +StopApplicationAsync(Guid, string)
+        +GetLaunchHistoryAsync(Guid)
+    }
+
+    class ProgramManagerService {
+        +StartProgram(string, string, string)
+        +StopProgram(int)
+        +GetRunningProcesses()
+        +IsProcessRunning(int)
+    }
+
+    class ConsoleEmailSender {
+        +SendEmailAsync(string, string, string)
+    }
+
+    %% Data Seeding
+    class TestDataSeeder {
+        +SeedTestDataAsync(IServiceProvider)
+    }
+
+    class ProductionSeeder {
+        +SeedEssentialDataAsync(IServiceProvider)
+        -SeedStandardApplicationsAsync(AppDbContext)
+    }
+
+    %% Beziehungen - Inheritance
+    AppUser --|> IdentityUser
+    AppDbContext --|> IdentityDbContext
+
+    %% Beziehungen - Composition/Aggregation
+    AppDbContext "1" *-- "many" AppUser
+    AppDbContext "1" *-- "many" Application
+    AppDbContext "1" *-- "many" AppOwnership
+    AppDbContext "1" *-- "many" AppLaunchHistory
+
+    %% Beziehungen - Association
+    AppOwnership "many" --> "1" AppUser : User
+    AppOwnership "many" --> "1" Application : Application
+    AppLaunchHistory "many" --> "1" Application : Application
+    AppLaunchHistory "many" --> "1" AppUser : User
+    Application "1" --> "many" AppOwnership : Owners
+    Application "1" --> "many" AppLaunchHistory : LaunchHistory
+    AppUser "1" --> "many" AppOwnership : OwnedApps
+
+    %% Service Dependencies
+    AppService ..> AppDbContext : uses
+    TestDataSeeder ..> AppDbContext : seeds
+    ProductionSeeder ..> AppDbContext : seeds
+
+    %% Styling
+    class AppUser,Application,AppOwnership,AppLaunchHistory {
+        color: #2196F3
+    }
+    class AppDbContext {
+        color: #4CAF50
+    }
+    class AppService,ProgramManagerService,ConsoleEmailSender {
+        color: #FF9800
+    }
+    class TestDataSeeder,ProductionSeeder {
+        color: #9C27B0
+    }
+```
